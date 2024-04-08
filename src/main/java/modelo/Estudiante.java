@@ -45,5 +45,5 @@ public class Estudiante extends Persona {
         this.carrera = carrera;
     }
  
-    // Añadir getters y setters para las calificaciones si es necesario
+  
 }

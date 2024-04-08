@@ -167,7 +167,7 @@ public class RegistroEstudiantesGUI {
 
                 // Aquí se verifica si ya se alcanzó el total de estudiantes y, de ser así, calcular y mostrar los promedios.
                 if (estudiantesIngresados >= totalEstudiantes) {
-                    // Puedes llamar aquí a un método que calcule y muestre los promedios, por ejemplo.
+                    
                     mostrarPromedios();
                 }
 

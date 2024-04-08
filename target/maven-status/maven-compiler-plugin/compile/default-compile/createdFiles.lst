@@ -1,7 +1,6 @@
 gui\RegistroEstudiantesGUI.class
 gui\RegistroEstudiantesGUI$1.class
 main\Main$1.class
+main\Main.class
 modelo\Estudiante.class
 modelo\Persona.class
-utilidades\Utilidades.class
-main\Main.class
