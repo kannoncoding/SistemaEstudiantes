@@ -1,3 +1,0 @@
-000001, Juan, Rodriguez, Vargas, Administracion
-123456789, Juan, Rogridez, Vargas, Administracion, 80, 98, 76, 80, 97
-123456789, Juan, Rodriguez, Vargas, Administracion, , , , , 

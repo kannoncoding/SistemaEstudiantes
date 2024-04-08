@@ -11,12 +11,16 @@ import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import modelo.Estudiante;
+
 
 public class RegistroEstudiantesGUI {
     private JFrame frame;
     private JPanel panel;
     private JTextArea textArea;
     private JScrollPane scrollPane;
+    
 
     // Declaraciones de campos de texto
     private JTextField identificadorField = new JTextField(10);
@@ -26,6 +30,8 @@ public class RegistroEstudiantesGUI {
     private JTextField carreraField = new JTextField(10);
     private JButton agregarBtn = new JButton("Agregar Estudiante"); // Botón de ejemplo
     
+    //lista de estudiantes
+    private ArrayList<Estudiante> estudiantes = new ArrayList<>();
     
     // Nuevos campos para las calificaciones
     private JTextField proyecto1Field = new JTextField(5);
@@ -34,9 +40,15 @@ public class RegistroEstudiantesGUI {
     private JTextField encuestaField = new JTextField(5);
     private JTextField juegoField = new JTextField(5);
     
+    
+    
+
+    
     // Variable para controlar la cantidad de estudiantes
     private int totalEstudiantes;
-private int estudiantesIngresados = 0;
+    private int estudiantesIngresados = 0;
+    
+    
     
     // Constructor
   public RegistroEstudiantesGUI() {
@@ -50,6 +62,25 @@ private int estudiantesIngresados = 0;
         }
         initializeUI();
     }
+  
+  private void mostrarPromedios() {
+    if (estudiantes.isEmpty()) {
+        textArea.append("No hay estudiantes para calcular promedios.\n");
+        return;
+    }
+
+    double sumaPromedios = 0;
+    for (Estudiante estudiante : estudiantes) {
+        double promedioEstudiante = estudiante.calcularPromedioFinal();
+        textArea.append("Promedio de " + estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2() + ": " + String.format("%.2f", promedioEstudiante) + "\n");
+        sumaPromedios += promedioEstudiante;
+    }
+
+    double promedioCurso = sumaPromedios / estudiantes.size();
+    textArea.append("Promedio de los estudiantes agregados: " + String.format("%.2f", promedioCurso) + "\n");
+}
+  
+  
     
     // Método para inicializar la interfaz de usuario
     private void initializeUI() {
@@ -85,14 +116,22 @@ private int estudiantesIngresados = 0;
         
         // Añadir botón y su lógica
         panel.add(agregarBtn);
-       agregarBtn.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-        String identificador = identificadorField.getText();
-        String nombre = nombreField.getText();
-        String apellido1 = apellido1Field.getText();
-        String apellido2 = apellido2Field.getText();
-        String carrera = carreraField.getText();
+        agregarBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Recolectar los datos de los campos de texto
+                String identificador = identificadorField.getText();
+                String nombre = nombreField.getText();
+                String apellido1 = apellido1Field.getText();
+                String apellido2 = apellido2Field.getText();
+                String carrera = carreraField.getText();
+                double proyecto1 = Double.parseDouble(proyecto1Field.getText());
+                double proyecto2 = Double.parseDouble(proyecto2Field.getText());
+                double foroAcademico = Double.parseDouble(foroAcademicoField.getText());
+                double encuesta = Double.parseDouble(encuestaField.getText());
+                double juego = Double.parseDouble(juegoField.getText());
 
+                
+                
         // Validación del identificador
         if (!identificador.matches("\\d{9}")) {
             JOptionPane.showMessageDialog(frame, "El identificador debe ser de 9 dígitos numéricos.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
@@ -116,10 +155,31 @@ private int estudiantesIngresados = 0;
                                 proyecto1Field.getText() + ", " + proyecto2Field.getText() + ", " + foroAcademicoField.getText() + ", " +
                                 encuestaField.getText() + ", " + juegoField.getText() + "\n";
         
+         // Crear una nueva instancia de Estudiante con los datos recogidos
+                Estudiante estudiante = new Estudiante(identificador, nombre, apellido1, apellido2, carrera,
+                                                        proyecto1, proyecto2, foroAcademico, encuesta, juego);
+
+                // Añadir la instancia a la lista de estudiantes
+                estudiantes.add(estudiante);
+                estudiantesIngresados++;
+
+                
+
+                // Aquí se verifica si ya se alcanzó el total de estudiantes y, de ser así, calcular y mostrar los promedios.
+                if (estudiantesIngresados >= totalEstudiantes) {
+                    // Puedes llamar aquí a un método que calcule y muestre los promedios, por ejemplo.
+                    mostrarPromedios();
+                }
+
+                // se indica que se agrego el estudiante
         guardarEnArchivo(infoEstudiante);
         textArea.append("Estudiante agregado: " + nombre + "\n");
+        
+        
     }
-});
+}
+        
+        );
 
 
         // Área de texto para mostrar estudiantes o resultados
@@ -143,4 +203,6 @@ private int estudiantesIngresados = 0;
         }
     }
 }
+
+
 
