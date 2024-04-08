@@ -22,7 +22,7 @@ public class Utilidades {
              PrintWriter out = new PrintWriter(bw)) {
             out.println(estudiante.getIdentificador() + "," + estudiante.getNombre() + "," +
                         estudiante.getApellido1() + "," + estudiante.getApellido2() + "," +
-                        estudiante.getCarrera() + "," + estudiante.calcularPromedio());
+                        estudiante.getCarrera() + "," + estudiante.calcularPromedioFinal());
         } catch (IOException e) {
             e.printStackTrace();
         }

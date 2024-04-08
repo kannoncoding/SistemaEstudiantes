@@ -30,11 +30,13 @@ public class Estudiante extends Persona {
     }
  
     // Métodos para calcular el promedio
-    public double calcularPromedio() {
-        return (proyecto1 * 0.4) + (proyecto2 * 0.4) + (foroAcademico * 0.1) + (encuesta * 0.05) + (juego * 0.05);
-    }
- 
-    // Getters y Setters
+ public double calcularPromedioFinal() {
+        return (proyecto1 * 0.4) + (proyecto2 * 0.4) + (foroAcademico * 0.1) +
+               (encuesta * 0.05) + (juego * 0.05);
+ }
+        
+
+// Getters y Setters
     public String getCarrera() {
         return carrera;
     }

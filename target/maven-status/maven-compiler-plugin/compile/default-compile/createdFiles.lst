@@ -1,6 +1,7 @@
-main/Main$1.class
-utilidades/Utilidades.class
-modelo/Estudiante.class
-gui/RegistroEstudiantesGUI.class
-main/Main.class
-modelo/Persona.class
+gui\RegistroEstudiantesGUI.class
+gui\RegistroEstudiantesGUI$1.class
+main\Main$1.class
+modelo\Estudiante.class
+modelo\Persona.class
+utilidades\Utilidades.class
+main\Main.class
