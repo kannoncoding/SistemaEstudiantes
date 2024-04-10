@@ -1,6 +1,5 @@
-gui\RegistroEstudiantesGUI.class
-gui\RegistroEstudiantesGUI$1.class
-main\Main$1.class
-main\Main.class
-modelo\Estudiante.class
-modelo\Persona.class
+main/Main$1.class
+modelo/Estudiante.class
+gui/RegistroEstudiantesGUI.class
+main/Main.class
+modelo/Persona.class
