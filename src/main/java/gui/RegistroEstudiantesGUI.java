@@ -144,9 +144,71 @@ public class RegistroEstudiantesGUI {
     }
 
     // Método para agregar estudiantes y validar los campos
-    private void agregarEstudiante() {
-        // Implementación omitida por brevedad, sigue siendo similar a la previa
+private void agregarEstudiante() {
+    // Recolectar los datos de los campos de texto
+    String identificador = identificadorField.getText();
+    String nombre = nombreField.getText();
+    String apellido1 = apellido1Field.getText();
+    String apellido2 = apellido2Field.getText();
+    String carrera = carreraField.getText();
+    String proyecto1Str = proyecto1Field.getText();
+    String proyecto2Str = proyecto2Field.getText();
+    String foroAcademicoStr = foroAcademicoField.getText();
+    String encuestaStr = encuestaField.getText();
+    String juegoStr = juegoField.getText();
+
+    // Validación básica
+    if (identificador.isEmpty() || nombre.isEmpty() || apellido1.isEmpty() ||
+        apellido2.isEmpty() || carrera.isEmpty() ||
+        proyecto1Str.isEmpty() || proyecto2Str.isEmpty() || foroAcademicoStr.isEmpty() ||
+        encuestaStr.isEmpty() || juegoStr.isEmpty()) {
+        JOptionPane.showMessageDialog(frame, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
+
+    // Convertir calificaciones de String a double
+    double proyecto1, proyecto2, foroAcademico, encuesta, juego;
+    try {
+        proyecto1 = Double.parseDouble(proyecto1Str);
+        proyecto2 = Double.parseDouble(proyecto2Str);
+        foroAcademico = Double.parseDouble(foroAcademicoStr);
+        encuesta = Double.parseDouble(encuestaStr);
+        juego = Double.parseDouble(juegoStr);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(frame, "Las calificaciones deben ser números válidos", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Crear instancia de Estudiante y añadirlo a la lista
+    Estudiante estudiante = new Estudiante(identificador, nombre, apellido1, apellido2, carrera, proyecto1, proyecto2, foroAcademico, encuesta, juego);
+    estudiantes.add(estudiante);
+    estudiantesIngresados++;
+
+    // Limpiar campos de texto después de añadir
+    limpiarCampos();
+
+    // Actualizar área de texto
+    textArea.append("Estudiante agregado: " + nombre + "\n");
+
+    // Verificar si se alcanzó el total de estudiantes y mostrar mensaje de completado
+    if (estudiantesIngresados >= totalEstudiantes) {
+        JOptionPane.showMessageDialog(frame, "Registro completado, " + totalEstudiantes + " estudiantes agregados", "Registro Completado", JOptionPane.INFORMATION_MESSAGE);
+    }
+}
+
+private void limpiarCampos() {
+    identificadorField.setText("");
+    nombreField.setText("");
+    apellido1Field.setText("");
+    apellido2Field.setText("");
+    carreraField.setText("");
+    proyecto1Field.setText("");
+    proyecto2Field.setText("");
+    foroAcademicoField.setText("");
+    encuestaField.setText("");
+    juegoField.setText("");
+}
+
 
     // Método para guardar información de estudiantes en un archivo
     private void guardarEnArchivo(String texto) {
