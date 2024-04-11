@@ -45,5 +45,24 @@ public class Estudiante extends Persona {
         this.carrera = carrera;
     }
  
+    public double getProyecto1() {
+        return proyecto1;
+    }
+
+    public double getProyecto2() {
+        return proyecto2;
+    }
+
+    public double getForoAcademico() {
+        return foroAcademico;
+    }
+
+    public double getEncuesta() {
+        return encuesta;
+    }
+
+    public double getJuego() {
+        return juego;
+    }
   
 }

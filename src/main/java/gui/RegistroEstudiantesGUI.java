@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import modelo.Estudiante;
+import utilidades.Utilidades;
+
 
 public class RegistroEstudiantesGUI {
     private JFrame frame;
@@ -51,20 +53,6 @@ public class RegistroEstudiantesGUI {
         initializeUI();
     }
 
-    private void mostrarPromedios() {
-        if (estudiantes.isEmpty()) {
-            textArea.append("No hay estudiantes para calcular promedios.\n");
-            return;
-        }
-        double sumaPromedios = 0;
-        for (Estudiante estudiante : estudiantes) {
-            double promedioEstudiante = estudiante.calcularPromedioFinal();
-            textArea.append("Promedio de " + estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2() + ": " + String.format("%.2f", promedioEstudiante) + "\n");
-            sumaPromedios += promedioEstudiante;
-        }
-        double promedioCurso = sumaPromedios / estudiantes.size();
-        textArea.append("Promedio de los estudiantes agregados: " + String.format("%.2f", promedioCurso) + "\n\n");
-    }
 
 // Método para el botón que muestra los estudiantes
 private void mostrarEstudiantes() {
@@ -79,9 +67,13 @@ private void mostrarEstudiantes() {
 
     // Append student details to the text area in the specified format
     for (Estudiante estudiante : estudiantes) {
-        String studentInfo = estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2() + "\n" + // Students Full Name
+        // Calculate the final score for the current student
+        double finalScore = Utilidades.calcularFinalScore(estudiante);
+
+        String studentInfo = estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2() + "\n" + // Student's Full Name
                              estudiante.getCarrera() + "\n" + // Carrera
-                             "carne No. " + estudiante.getIdentificador() + "\n\n\n"; // carne No. (identificador)
+                             "carne No. " + estudiante.getIdentificador() + "\n" + // carne No. (identificador)
+                             "Nota Final: " + String.format("%.2f", finalScore) + "\n\n\n"; // Final Score with two decimal places
         estudiantesTextArea.append(studentInfo);
     }
 
@@ -90,6 +82,7 @@ private void mostrarEstudiantes() {
     estudiantesFrame.setLocationRelativeTo(null);
     estudiantesFrame.setVisible(true);
 }
+
 
 
     // Método para inicializar la interfaz de usuario
