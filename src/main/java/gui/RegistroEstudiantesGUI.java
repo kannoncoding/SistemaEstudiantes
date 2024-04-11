@@ -66,27 +66,31 @@ public class RegistroEstudiantesGUI {
         textArea.append("Promedio de los estudiantes agregados: " + String.format("%.2f", promedioCurso) + "\n\n");
     }
 
-    // Método para el botón que muestra los estudiantes
-    private void mostrarEstudiantes() {
-        JFrame estudiantesFrame = new JFrame("Lista de Estudiantes");
-        estudiantesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        estudiantesFrame.setSize(400, 600);
+// Método para el botón que muestra los estudiantes
+private void mostrarEstudiantes() {
+    JFrame estudiantesFrame = new JFrame("Lista de Estudiantes");
+    estudiantesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    estudiantesFrame.setSize(400, 600);
 
-        JTextArea estudiantesTextArea = new JTextArea();
-        estudiantesTextArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(estudiantesTextArea);
-        estudiantesFrame.add(scrollPane);
+    JTextArea estudiantesTextArea = new JTextArea();
+    estudiantesTextArea.setEditable(false);
+    JScrollPane scrollPane = new JScrollPane(estudiantesTextArea);
+    estudiantesFrame.add(scrollPane);
 
-        // Append student details to the text area
-        for (Estudiante estudiante : estudiantes) {
-            estudiantesTextArea.append(estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2() + " - " + estudiante.getCarrera() + "\n");
-        }
-
-        // Display the window
-        estudiantesFrame.pack();
-        estudiantesFrame.setLocationRelativeTo(null);
-        estudiantesFrame.setVisible(true);
+    // Append student details to the text area in the specified format
+    for (Estudiante estudiante : estudiantes) {
+        String studentInfo = estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2() + "\n" + // Students Full Name
+                             estudiante.getCarrera() + "\n" + // Carrera
+                             "carne No. " + estudiante.getIdentificador() + "\n\n\n"; // carne No. (identificador)
+        estudiantesTextArea.append(studentInfo);
     }
+
+    // Display the window
+    estudiantesFrame.pack();
+    estudiantesFrame.setLocationRelativeTo(null);
+    estudiantesFrame.setVisible(true);
+}
+
 
     // Método para inicializar la interfaz de usuario
     private void initializeUI() {
