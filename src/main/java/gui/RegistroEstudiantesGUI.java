@@ -216,4 +216,25 @@ private void limpiarCampos() {
         }
     }
     
+    private void guardarDetallesEnArchivo(Estudiante estudiante) {
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("Promedios.txt", true))) {
+        double finalScore = Utilidades.calcularFinalScore(estudiante);
+        String studentDetails = estudiante.getIdentificador() + ", " +
+                                estudiante.getNombre() + " " +
+                                estudiante.getApellido1() + " " +
+                                estudiante.getApellido2() + ", " +
+                                estudiante.getCarrera() + ", " +
+                                "Proyecto 1: " + estudiante.getProyecto1() + ", " +
+                                "Proyecto 2: " + estudiante.getProyecto2() + ", " +
+                                "Foro Académico: " + estudiante.getForoAcademico() + ", " +
+                                "Encuesta: " + estudiante.getEncuesta() + ", " +
+                                "Juego: " + estudiante.getJuego() + ", " +
+                                "Nota Final: " + String.format("%.2f", finalScore) + "\n";
+        bw.write(studentDetails);
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(frame, "Error al guardar en archivo", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    
 }
