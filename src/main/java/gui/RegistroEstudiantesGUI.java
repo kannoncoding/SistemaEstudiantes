@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,8 +15,13 @@ import utilidades.Utilidades;
 
 public class RegistroEstudiantesGUI {
     private JFrame frame;
-    private JPanel panel;
-    private JTextArea textArea;
+    private JPanel panel;  
+//    private JTextArea textArea;  >por eliminarse
+
+// por implementar tablas en vez de texto
+    private JTable table;
+    private DefaultTableModel model;    
+    
     private JScrollPane scrollPane;
 
     // Declaraciones de campos de texto
@@ -62,28 +68,26 @@ private void mostrarEstudiantes() {
     estudiantesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     estudiantesFrame.setSize(400, 600);
 
-    JTextArea estudiantesTextArea = new JTextArea();
-    estudiantesTextArea.setEditable(false);
-    JScrollPane scrollPane = new JScrollPane(estudiantesTextArea);
-    estudiantesFrame.add(scrollPane);
+    // limpiar el modelo antes de añadir nuevas filas?
+    model.setRowCount(0);
 
-    // Append student details to the text area in the specified format
+    // Agrega los datos de los estudiantes al modelo de la tabla
     for (Estudiante estudiante : estudiantes) {
-        // Calculate the final score for the current student
         double finalScore = Utilidades.calcularFinalScore(estudiante);
-
-        String studentInfo = estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2() + "\n" + // Student's Full Name
-                             estudiante.getCarrera() + "\n" + // Carrera
-                             "carne No. " + estudiante.getIdentificador() + "\n" + // carne No. (identificador)
-                             "Nota Final: " + String.format("%.2f", finalScore) + "\n\n\n"; // Final Score with two decimal places
-        estudiantesTextArea.append(studentInfo);
+        String nombreCompleto = estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2();
+        Object[] row = {estudiante.getIdentificador(), nombreCompleto, estudiante.getCarrera(), String.format("%.2f", finalScore)};
+        model.addRow(row);
     }
+
+    JScrollPane scrollPane = new JScrollPane(table);
+    estudiantesFrame.add(scrollPane);
 
     // Display the window
     estudiantesFrame.pack();
     estudiantesFrame.setLocationRelativeTo(null);
     estudiantesFrame.setVisible(true);
 }
+
 
 private void eliminarEstudiante() {
     String idParaEliminar = eliminarIdField.getText();
@@ -93,10 +97,12 @@ private void eliminarEstudiante() {
         return;
     }
 
+    int estudianteIndex = -1; // Índice del estudiante en la lista
     Estudiante estudianteParaEliminar = null;
-    for (Estudiante estudiante : estudiantes) {
-        if (estudiante.getIdentificador().equals(idParaEliminar)) {
-            estudianteParaEliminar = estudiante;
+    for (int i = 0; i < estudiantes.size(); i++) {
+        if (estudiantes.get(i).getIdentificador().equals(idParaEliminar)) {
+            estudianteParaEliminar = estudiantes.get(i);
+            estudianteIndex = i;
             break;
         }
     }
@@ -107,17 +113,22 @@ private void eliminarEstudiante() {
     }
 
     // Confirmación para eliminar al estudiante
-    int confirmacion = JOptionPane.showConfirmDialog(frame, 
-        "¿Eliminar al Estudiante " + estudianteParaEliminar.getNombreCompleto() + " con carné " + estudianteParaEliminar.getIdentificador() + "?", 
+    int confirmacion = JOptionPane.showConfirmDialog(frame,
+        "¿Eliminar al Estudiante " + estudianteParaEliminar.getNombreCompleto() + 
+        " con carné " + estudianteParaEliminar.getIdentificador() + "?",
         "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
     if (confirmacion == JOptionPane.YES_OPTION) {
-        estudiantes.remove(estudianteParaEliminar);
-        actualizarArchivos();  // Llamada a la función para actualizar los archivos
-        textArea.append("Estudiante eliminado: " + estudianteParaEliminar.getNombreCompleto() + "\n");
+        // Elimina del modelo de la tabla y de la lista
+        if (estudianteIndex != -1) {
+            estudiantes.remove(estudianteIndex);
+            model.removeRow(estudianteIndex);
+        }
+        actualizarArchivos();  // Actualiza los archivos tras la eliminación
         JOptionPane.showMessageDialog(frame, "Estudiante eliminado correctamente", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
     }
 }
+
 
 private void actualizarArchivos() {
     // Sobreescribe el archivo Estudiantes.txt
@@ -141,31 +152,28 @@ private void actualizarArchivos() {
 
 
     // Método para inicializar la interfaz de usuario
-    private void initializeUI() {
-        frame = new JFrame("Registro de Estudiantes");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(700, 900);
 
-        panel = new JPanel(new GridLayout(0, 2));
+private void initializeUI() {
+    frame = new JFrame("Registro de Estudiantes");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(700, 900);
 
-        // Añadir campos de texto y etiquetas al panel
-        addComponentsToPanel();
+    panel = new JPanel(new BorderLayout());
 
-        // Añadir botón para mostrar los estudiantes y su lógica
-        panel.add(mostrarEstudiantesBtn);
-        mostrarEstudiantesBtn.addActionListener(e -> mostrarEstudiantes());
+    // Definir columnas y modelo de la tabla
+    String[] columnNames = {"Identificador", "Nombre Completo", "Carrera", "Nota Final"};
+    model = new DefaultTableModel(columnNames, 0); // 0 indica que comienza sin filas
+    table = new JTable(model);
+    table.setFillsViewportHeight(true);
 
-        // Área de texto para mostrar estudiantes o resultados
-        textArea = new JTextArea(10, 40);
-        textArea.setEditable(false);
-        scrollPane = new JScrollPane(textArea);
-        frame.add(panel, BorderLayout.NORTH);
-        frame.add(scrollPane, BorderLayout.CENTER);
+    // Añadir la tabla a un JScrollPane
+    scrollPane = new JScrollPane(table);
+    panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Mostrar la ventana
-        frame.pack();
-        frame.setVisible(true);
-    }
+    frame.add(panel);
+    frame.pack();
+    frame.setVisible(true);
+}
 
     // Método para añadir componentes al panel
     private void addComponentsToPanel() {
@@ -201,8 +209,7 @@ private void actualizarArchivos() {
         eliminarBtn.addActionListener(e -> eliminarEstudiante());
     }
 
-    // Método para agregar estudiantes y validar los campos
-private void agregarEstudiante() {
+    private void agregarEstudiante() {
     // Recolectar los datos de los campos de texto
     String identificador = identificadorField.getText();
     String nombre = nombreField.getText();
@@ -242,17 +249,19 @@ private void agregarEstudiante() {
     estudiantes.add(estudiante);
     estudiantesIngresados++;
 
+    // Añadir fila al modelo de la tabla
+    String nombreCompleto = nombre + " " + apellido1 + " " + apellido2;
+    model.addRow(new Object[]{identificador, nombreCompleto, carrera, String.format("%.2f", estudiante.calcularPromedioFinal())});
+
     // Limpiar campos de texto después de añadir
     limpiarCampos();
-
-    // Actualizar área de texto
-    textArea.append("Estudiante agregado: " + nombre + "\n");
 
     // Verificar si se alcanzó el total de estudiantes y mostrar mensaje de completado
     if (estudiantesIngresados >= totalEstudiantes) {
         JOptionPane.showMessageDialog(frame, "Registro completado, " + totalEstudiantes + " estudiantes agregados", "Registro Completado", JOptionPane.INFORMATION_MESSAGE);
     }
 }
+   
 
 private void limpiarCampos() {
     identificadorField.setText("");
@@ -299,3 +308,4 @@ private void limpiarCampos() {
 
     
 }
+    
