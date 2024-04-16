@@ -158,22 +158,57 @@ private void initializeUI() {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(700, 900);
 
-    panel = new JPanel(new BorderLayout());
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    JPanel inputPanel = new JPanel(new GridLayout(0, 2, 10, 10)); // Usamos un GridLayout para los inputs y botones
+
+    // Añade campos y botones al panel de inputs
+    inputPanel.add(new JLabel("Identificador:"));
+    inputPanel.add(identificadorField);
+    inputPanel.add(new JLabel("Nombre:"));
+    inputPanel.add(nombreField);
+    inputPanel.add(new JLabel("Primer apellido:"));
+    inputPanel.add(apellido1Field);
+    inputPanel.add(new JLabel("Segundo apellido:"));
+    inputPanel.add(apellido2Field);
+    inputPanel.add(new JLabel("Carrera:"));
+    inputPanel.add(carreraField);
+    inputPanel.add(new JLabel("Proyecto 1:"));
+    inputPanel.add(proyecto1Field);
+    inputPanel.add(new JLabel("Proyecto 2:"));
+    inputPanel.add(proyecto2Field);
+    inputPanel.add(new JLabel("Foro Académico:"));
+    inputPanel.add(foroAcademicoField);
+    inputPanel.add(new JLabel("Encuesta:"));
+    inputPanel.add(encuestaField);
+    inputPanel.add(new JLabel("Juego:"));
+    inputPanel.add(juegoField);
+    inputPanel.add(agregarBtn);
+    inputPanel.add(new JLabel("ID para eliminar:"));
+    inputPanel.add(eliminarIdField);
+    inputPanel.add(eliminarBtn);
+
+    // Configuración del botón agregar
+    agregarBtn.addActionListener(e -> agregarEstudiante());
+    // Configuración del botón eliminar
+    eliminarBtn.addActionListener(e -> eliminarEstudiante());
 
     // Definir columnas y modelo de la tabla
     String[] columnNames = {"Identificador", "Nombre Completo", "Carrera", "Nota Final"};
-    model = new DefaultTableModel(columnNames, 0); // 0 indica que comienza sin filas
+    model = new DefaultTableModel(columnNames, 0);
     table = new JTable(model);
     table.setFillsViewportHeight(true);
+    JScrollPane tableScrollPane = new JScrollPane(table);
 
-    // Añadir la tabla a un JScrollPane
-    scrollPane = new JScrollPane(table);
-    panel.add(scrollPane, BorderLayout.CENTER);
+    // Añadir los subpaneles al panel principal
+    mainPanel.add(inputPanel, BorderLayout.NORTH);
+    mainPanel.add(tableScrollPane, BorderLayout.CENTER);
 
-    frame.add(panel);
+    // Añadir el panel principal al frame
+    frame.add(mainPanel);
     frame.pack();
     frame.setVisible(true);
 }
+
 
     // Método para añadir componentes al panel
     private void addComponentsToPanel() {
