@@ -26,6 +26,8 @@ public class RegistroEstudiantesGUI {
     private JTextField carreraField = new JTextField(10);
     private JButton agregarBtn = new JButton("Agregar Estudiante");
     private JButton mostrarEstudiantesBtn = new JButton("Mostrar Estudiantes");
+    private JButton eliminarBtn = new JButton("Eliminar Estudiante");
+    private JTextField eliminarIdField = new JTextField(10);
 
     // Lista de estudiantes
     private ArrayList<Estudiante> estudiantes = new ArrayList<>();
@@ -83,6 +85,59 @@ private void mostrarEstudiantes() {
     estudiantesFrame.setVisible(true);
 }
 
+private void eliminarEstudiante() {
+    String idParaEliminar = eliminarIdField.getText();
+
+    if (idParaEliminar.isEmpty()) {
+        JOptionPane.showMessageDialog(frame, "Ingrese un ID para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    Estudiante estudianteParaEliminar = null;
+    for (Estudiante estudiante : estudiantes) {
+        if (estudiante.getIdentificador().equals(idParaEliminar)) {
+            estudianteParaEliminar = estudiante;
+            break;
+        }
+    }
+
+    if (estudianteParaEliminar == null) {
+        JOptionPane.showMessageDialog(frame, "No se encontró el estudiante con ID: " + idParaEliminar, "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Confirmación para eliminar al estudiante
+    int confirmacion = JOptionPane.showConfirmDialog(frame, 
+        "¿Eliminar al Estudiante " + estudianteParaEliminar.getNombreCompleto() + " con carné " + estudianteParaEliminar.getIdentificador() + "?", 
+        "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        estudiantes.remove(estudianteParaEliminar);
+        actualizarArchivos();  // Llamada a la función para actualizar los archivos
+        textArea.append("Estudiante eliminado: " + estudianteParaEliminar.getNombreCompleto() + "\n");
+        JOptionPane.showMessageDialog(frame, "Estudiante eliminado correctamente", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+    }
+}
+
+private void actualizarArchivos() {
+    // Sobreescribe el archivo Estudiantes.txt
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("Estudiantes.txt"))) {
+        for (Estudiante estudiante : estudiantes) {
+            bw.write(estudiante.toArchivo());
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(frame, "Error al guardar en archivo", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Sobreescribe el archivo Promedios.txt
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("Promedios.txt"))) {
+        for (Estudiante estudiante : estudiantes) {
+            bw.write(estudiante.toPromediosArchivo());
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(frame, "Error al guardar en archivo", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
 
     // Método para inicializar la interfaz de usuario
@@ -135,9 +190,15 @@ private void mostrarEstudiantes() {
         panel.add(new JLabel("Juego:"));
         panel.add(juegoField);
         panel.add(agregarBtn);
+        panel.add(new JLabel("ID para eliminar:"));
+        panel.add(eliminarIdField);
+        panel.add(eliminarBtn);
 
         // Lógica para agregar estudiantes
         agregarBtn.addActionListener(e -> agregarEstudiante());
+        
+        // Configuración del botón eliminar
+        eliminarBtn.addActionListener(e -> eliminarEstudiante());
     }
 
     // Método para agregar estudiantes y validar los campos

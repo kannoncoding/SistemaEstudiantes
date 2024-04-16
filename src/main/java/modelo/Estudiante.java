@@ -34,8 +34,25 @@ public class Estudiante extends Persona {
         return (proyecto1 * 0.4) + (proyecto2 * 0.4) + (foroAcademico * 0.1) +
                (encuesta * 0.05) + (juego * 0.05);
  }
-        
+      
+  // Método para generar la cadena de texto para Estudiantes.txt
+ public String toArchivo() {
+        return identificador + ", " + nombre + " " + apellido1 + " " + apellido2 + ", " + carrera + "\n";
+    }
 
+ // Método para generar la cadena de texto para Promedios.txt
+    public String toPromediosArchivo() {
+        return identificador + ", " +
+               nombre + " " + apellido1 + " " + apellido2 + ", " +
+               carrera + ", " +
+               "Proyecto 1: " + proyecto1 + ", " +
+               "Proyecto 2: " + proyecto2 + ", " +
+               "Foro Académico: " + foroAcademico + ", " +
+               "Encuesta: " + encuesta + ", " +
+               "Juego: " + juego + ", " +
+               "Nota Final: " + String.format("%.2f", calcularPromedioFinal()) + "\n";
+    }
+ 
 // Getters y Setters
     public String getCarrera() {
         return carrera;
