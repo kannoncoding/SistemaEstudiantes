@@ -1,3 +1,6 @@
-modelo/Estudiante.class
+main/Main$1.class
 utilidades/Utilidades.class
+modelo/Estudiante.class
+gui/RegistroEstudiantesGUI.class
+main/Main.class
 modelo/Persona.class

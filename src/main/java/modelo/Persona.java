@@ -54,4 +54,10 @@ public class Persona {
     public void setApellido2(String apellido2) {
         this.apellido2 = apellido2;
     }
+    
+    // Método para obtener el nombre completo
+    public String getNombreCompleto() {
+        return nombre + " " + apellido1 + " " + apellido2;
+    }
+    
 }
