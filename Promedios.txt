@@ -1,2 +1,3 @@
-111111111, Jorge Arias Brenes, Computacion, Proyecto 1: 90.0, Proyecto 2: 90.0, Foro Académico: 100.0, Encuesta: 70.0, Juego: 85.0, Nota Final: 89.75
-333333333, Maria Contreras Perez, Administracion, Proyecto 1: 80.0, Proyecto 2: 70.0, Foro Académico: 70.0, Encuesta: 70.0, Juego: 75.0, Nota Final: 74.25
+111111111, Julio Barrantes Brenes, Computo, Proyecto 1: 80.0, Proyecto 2: 70.0, Foro Académico: 65.0, Encuesta: 90.0, Juego: 90.0, Nota Final: 75.50
+222222222, Andrea Mejia Furnier, Administracion, Proyecto 1: 80.0, Proyecto 2: 80.0, Foro Académico: 70.0, Encuesta: 80.0, Juego: 80.0, Nota Final: 79.00
+333333333, Hellen Piedra Sibaja, Computo, Proyecto 1: 80.0, Proyecto 2: 70.0, Foro Académico: 70.0, Encuesta: 87.0, Juego: 68.0, Nota Final: 74.75

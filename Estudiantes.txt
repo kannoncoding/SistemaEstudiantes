@@ -1,2 +1,3 @@
-111111111, Jorge Arias Brenes, Computacion
-333333333, Maria Contreras Perez, Administracion
+111111111, Julio Barrantes Brenes, Computo
+222222222, Andrea Mejia Furnier, Administracion
+333333333, Hellen Piedra Sibaja, Computo

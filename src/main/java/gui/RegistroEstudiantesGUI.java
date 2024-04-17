@@ -128,9 +128,16 @@ private void eliminarEstudiante() {
         estudiantes.remove(estudianteIndex);
         model.removeRow(estudianteIndex);
         actualizarArchivos();
+        estudiantesIngresados--;  // Decrementar el contador de estudiantes ingresados
         JOptionPane.showMessageDialog(frame, "Estudiante eliminado correctamente", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Verificar si aún es posible ingresar más estudiantes
+        if (estudiantesIngresados < totalEstudiantes) {
+            JOptionPane.showMessageDialog(frame, "Puede registrar " + (totalEstudiantes - estudiantesIngresados) + " estudiantes más.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }
+
 
 
 
@@ -162,7 +169,7 @@ private void initializeUI() {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(700, 900);
 
-    JPanel mainPanel = new JPanel(new BorderLayout(10, 10)); // Espacio entre los paneles
+    JPanel mainPanel = new JPanel(new BorderLayout(20, 20)); // Espacio entre los paneles
     JPanel inputPanel = new JPanel(new GridLayout(0, 2, 10, 10)); // GridLayout para los inputs
     JPanel buttonPanel = new JPanel(new FlowLayout()); // FlowLayout para los botones
 
@@ -198,12 +205,19 @@ private void initializeUI() {
     mostrarEstudiantesBtn.addActionListener(e -> mostrarEstudiantes());
     eliminarBtn.addActionListener(e -> eliminarEstudiante());
 
-    // Tabla y su ScrollPane
+   // Tabla y su ScrollPane
     String[] columnNames = {"Identificador", "Nombre Completo", "Carrera", "Nota Final"};
-    model = new DefaultTableModel(columnNames, 0);
+    model = new DefaultTableModel(columnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            // Hacer todas las celdas no editables
+            return false;
+        }
+    };
     table = new JTable(model);
-    JScrollPane tableScrollPane = new JScrollPane(table);
+    table.setAutoCreateRowSorter(true); // Habilitar el ordenamiento por columnas
     table.setFillsViewportHeight(true);
+    JScrollPane tableScrollPane = new JScrollPane(table);
 
     // Añadir subpaneles al panel principal
     mainPanel.add(inputPanel, BorderLayout.NORTH);
@@ -218,7 +232,7 @@ private void initializeUI() {
 
 
 
-    // Método para añadir componentes al panel
+    // Método para añadir componentes al panel  
     private void addComponentsToPanel() {
         panel.add(new JLabel("Identificador:"));
         panel.add(identificadorField);
