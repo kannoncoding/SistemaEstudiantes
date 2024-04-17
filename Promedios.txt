@@ -1,1 +1,2 @@
-1111111111, Juan Cortes Perez, Derecho, Proyecto 1: 80.0, Proyecto 2: 80.0, Foro Académico: 70.0, Encuesta: 90.0, Juego: 60.0, Nota Final: 78.50
+111111111, Jorge Arias Brenes, Computacion, Proyecto 1: 90.0, Proyecto 2: 90.0, Foro Académico: 100.0, Encuesta: 70.0, Juego: 85.0, Nota Final: 89.75
+333333333, Maria Contreras Perez, Administracion, Proyecto 1: 80.0, Proyecto 2: 70.0, Foro Académico: 70.0, Encuesta: 70.0, Juego: 75.0, Nota Final: 74.25

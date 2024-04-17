@@ -1,1 +1,2 @@
-1111111111, Juan Cortes Perez, Derecho
+111111111, Jorge Arias Brenes, Computacion
+333333333, Maria Contreras Perez, Administracion

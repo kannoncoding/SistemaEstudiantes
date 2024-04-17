@@ -33,7 +33,6 @@ public class RegistroEstudiantesGUI {
     private JButton agregarBtn = new JButton("Agregar Estudiante");
     private JButton mostrarEstudiantesBtn = new JButton("Mostrar Estudiantes");
     private JButton eliminarBtn = new JButton("Eliminar Estudiante");
-    private JTextField eliminarIdField = new JTextField(10);
 
     // Lista de estudiantes
     private ArrayList<Estudiante> estudiantes = new ArrayList<>();
@@ -68,36 +67,43 @@ private void mostrarEstudiantes() {
     estudiantesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     estudiantesFrame.setSize(400, 600);
 
-    // limpiar el modelo antes de añadir nuevas filas?
-    model.setRowCount(0);
-
-    // Agrega los datos de los estudiantes al modelo de la tabla
+    // Crear un nuevo modelo para la tabla emergente
+    DefaultTableModel tempModel = new DefaultTableModel();
+    tempModel.setColumnIdentifiers(new Object[]{"Identificador", "Nombre Completo", "Carrera", "Nota Final"});
+    
+    // Copia los datos de los estudiantes al nuevo modelo
     for (Estudiante estudiante : estudiantes) {
         double finalScore = Utilidades.calcularFinalScore(estudiante);
         String nombreCompleto = estudiante.getNombre() + " " + estudiante.getApellido1() + " " + estudiante.getApellido2();
         Object[] row = {estudiante.getIdentificador(), nombreCompleto, estudiante.getCarrera(), String.format("%.2f", finalScore)};
-        model.addRow(row);
+        tempModel.addRow(row);
     }
 
-    JScrollPane scrollPane = new JScrollPane(table);
-    estudiantesFrame.add(scrollPane);
+    // Crear una nueva tabla para la ventana emergente con el nuevo modelo
+    JTable tempTable = new JTable(tempModel);
+    JScrollPane tempScrollPane = new JScrollPane(tempTable);
+    estudiantesFrame.add(tempScrollPane);
 
-    // Display the window
+    // Mostrar la ventana
     estudiantesFrame.pack();
     estudiantesFrame.setLocationRelativeTo(null);
     estudiantesFrame.setVisible(true);
 }
 
 
-private void eliminarEstudiante() {
-    String idParaEliminar = eliminarIdField.getText();
+// metodo para eliminar estudiante con una ventana emergente
 
-    if (idParaEliminar.isEmpty()) {
+private void eliminarEstudiante() {
+    // Pedir al usuario que ingrese el ID del estudiante a eliminar
+    String idParaEliminar = JOptionPane.showInputDialog(frame, "Ingrese el ID del estudiante a eliminar:");
+    
+    if (idParaEliminar == null || idParaEliminar.isEmpty()) {
         JOptionPane.showMessageDialog(frame, "Ingrese un ID para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    int estudianteIndex = -1; // Índice del estudiante en la lista
+    // Buscar y eliminar el estudiante si se encuentra
+    int estudianteIndex = -1;
     Estudiante estudianteParaEliminar = null;
     for (int i = 0; i < estudiantes.size(); i++) {
         if (estudiantes.get(i).getIdentificador().equals(idParaEliminar)) {
@@ -112,22 +118,20 @@ private void eliminarEstudiante() {
         return;
     }
 
-    // Confirmación para eliminar al estudiante
+    // Confirmar la eliminación
     int confirmacion = JOptionPane.showConfirmDialog(frame,
         "¿Eliminar al Estudiante " + estudianteParaEliminar.getNombreCompleto() + 
         " con carné " + estudianteParaEliminar.getIdentificador() + "?",
         "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
     if (confirmacion == JOptionPane.YES_OPTION) {
-        // Elimina del modelo de la tabla y de la lista
-        if (estudianteIndex != -1) {
-            estudiantes.remove(estudianteIndex);
-            model.removeRow(estudianteIndex);
-        }
-        actualizarArchivos();  // Actualiza los archivos tras la eliminación
+        estudiantes.remove(estudianteIndex);
+        model.removeRow(estudianteIndex);
+        actualizarArchivos();
         JOptionPane.showMessageDialog(frame, "Estudiante eliminado correctamente", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
     }
 }
+
 
 
 private void actualizarArchivos() {
@@ -158,10 +162,11 @@ private void initializeUI() {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(700, 900);
 
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    JPanel inputPanel = new JPanel(new GridLayout(0, 2, 10, 10)); // Usamos un GridLayout para los inputs y botones
+    JPanel mainPanel = new JPanel(new BorderLayout(10, 10)); // Espacio entre los paneles
+    JPanel inputPanel = new JPanel(new GridLayout(0, 2, 10, 10)); // GridLayout para los inputs
+    JPanel buttonPanel = new JPanel(new FlowLayout()); // FlowLayout para los botones
 
-    // Añade campos y botones al panel de inputs
+    // Añade campos al panel de inputs
     inputPanel.add(new JLabel("Identificador:"));
     inputPanel.add(identificadorField);
     inputPanel.add(new JLabel("Nombre:"));
@@ -182,25 +187,27 @@ private void initializeUI() {
     inputPanel.add(encuestaField);
     inputPanel.add(new JLabel("Juego:"));
     inputPanel.add(juegoField);
-    inputPanel.add(agregarBtn);
-    inputPanel.add(new JLabel("ID para eliminar:"));
-    inputPanel.add(eliminarIdField);
-    inputPanel.add(eliminarBtn);
 
-    // Configuración del botón agregar
+    // Añade botones al panel de botones
+    buttonPanel.add(agregarBtn);
+    buttonPanel.add(mostrarEstudiantesBtn);
+    buttonPanel.add(eliminarBtn);
+
+    // Configura los listeners de los botones
     agregarBtn.addActionListener(e -> agregarEstudiante());
-    // Configuración del botón eliminar
+    mostrarEstudiantesBtn.addActionListener(e -> mostrarEstudiantes());
     eliminarBtn.addActionListener(e -> eliminarEstudiante());
 
-    // Definir columnas y modelo de la tabla
+    // Tabla y su ScrollPane
     String[] columnNames = {"Identificador", "Nombre Completo", "Carrera", "Nota Final"};
     model = new DefaultTableModel(columnNames, 0);
     table = new JTable(model);
-    table.setFillsViewportHeight(true);
     JScrollPane tableScrollPane = new JScrollPane(table);
+    table.setFillsViewportHeight(true);
 
-    // Añadir los subpaneles al panel principal
+    // Añadir subpaneles al panel principal
     mainPanel.add(inputPanel, BorderLayout.NORTH);
+    mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     mainPanel.add(tableScrollPane, BorderLayout.CENTER);
 
     // Añadir el panel principal al frame
@@ -208,6 +215,7 @@ private void initializeUI() {
     frame.pack();
     frame.setVisible(true);
 }
+
 
 
     // Método para añadir componentes al panel
@@ -233,8 +241,6 @@ private void initializeUI() {
         panel.add(new JLabel("Juego:"));
         panel.add(juegoField);
         panel.add(agregarBtn);
-        panel.add(new JLabel("ID para eliminar:"));
-        panel.add(eliminarIdField);
         panel.add(eliminarBtn);
 
         // Lógica para agregar estudiantes
