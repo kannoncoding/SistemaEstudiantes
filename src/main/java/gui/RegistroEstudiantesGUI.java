@@ -290,6 +290,9 @@ private void initializeUI() {
 
     // Limpiar campos de texto después de añadir
     limpiarCampos();
+    
+    // Actualizar archivos cada vez que se agrega un estudiante
+    actualizarArchivos();
 
     // Verificar si se alcanzó el total de estudiantes y mostrar mensaje de completado
     if (estudiantesIngresados >= totalEstudiantes) {

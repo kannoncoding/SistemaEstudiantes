@@ -1,0 +1,1 @@
+1111111111, Juan Cortes Perez, Derecho, Proyecto 1: 80.0, Proyecto 2: 80.0, Foro Académico: 70.0, Encuesta: 90.0, Juego: 60.0, Nota Final: 78.50
